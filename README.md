@@ -1,5 +1,10 @@
 # Fork of CakePHP 2 with support for PHP8
 
+Forked again and updated by F Stark for FM Systems in Dec 2022.
+This fork includes an update in the CakeCookie component which allows for the samesite flag to be used.
+
+~~ The rest of this file relates to the original fork, which updates Cake2 to run on PHP 8.0 and 8.1.
+
 ~~For original README content please check original repository: https://github.com/cakephp/cakephp/tree/2.x~~
 
 Unfortunately branch 2.x in original repository was taken down.

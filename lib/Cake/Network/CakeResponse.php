@@ -453,11 +453,24 @@ class CakeResponse {
  */
 	protected function _setCookies() {
 		foreach ($this->_cookies as $name => $c) {
-			setcookie(
-				$name, $c['value'], $c['expire'], $c['path'],
-				$c['domain'], $c['secure'], $c['httpOnly']
-			);
-		}
+		    if(isset($c['samesite'])){   //set default to strict if not set
+		        $sameSite = $c['samesite'];
+	            }else{
+		        $sameSite = 'Strict';
+                    }
+	            setcookie(
+                        $name,
+                        $c['value'],
+	                [
+                            'expires' => $c['expire'],
+                            'path' => $c['path'],
+                            'domain' => $c['domain'],
+	                    'secure' => $c['secure'],
+                            'httponly' => $c['httpOnly'],
+                            'samesite' => $sameSite
+	                ]
+                    );
+                }
 	}
 
 /**
