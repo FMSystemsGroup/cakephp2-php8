@@ -162,6 +162,12 @@ class ErrorHandler {
 				$message .= "\nRequest URL: " . $request->here();
 			}
 		}
+		if (method_exists($exception, 'getFile')) {
+			$message .= "\nFile: " . $exception->getFile();
+			if (method_exists($exception, 'getLine')) {
+				$message .= " (" . $exception->getLine().")";
+			}
+		}
 		$message .= "\nStack Trace:\n" . $exception->getTraceAsString();
 		return $message;
 	}
