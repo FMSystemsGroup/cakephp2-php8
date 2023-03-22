@@ -60,6 +60,26 @@ It means that composer will look at `master` branch of repository configured und
 
 ## Changelog
 
+### 2023-02-19
+
+- Fixed PHP 8.1 MySQL test suite.
+
+### 2023-02-11
+
+- Fixed PostgreSQL test suite.
+
+### 2023-01-30
+
+- `PaginatorHelper` fix.
+
+### 2023-01-22
+
+- Fixed views cache when relative time is specified.
+
+### 2023-01-11
+
+- Fixed test suite to run under PHPUnit 9.5 and PHP8. Big kudos to @tenkoma :clap:
+
 ### 2022-10-20
 
 - `MailTransport` fix.
