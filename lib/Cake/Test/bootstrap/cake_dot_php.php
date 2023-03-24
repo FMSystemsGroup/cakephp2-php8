@@ -2,42 +2,43 @@
 /**
  * lib/Cake/Console/cake.php initialize
  */
+const APP_DIR = 'app';
+const WEBROOT_DIR = 'webroot';
 
-if (!defined('DS')) {
-	define('DS', DIRECTORY_SEPARATOR);
+$dirPath =explode(DS,$filename);
+$root = '';
+foreach ($dirPath as $folder){
+
+if ($folder == APP_DIR)
+	break;
+	$root .= $folder . DS;
+
 }
 
-$dispatcher = 'Cake' . DS . 'Console' . DS . 'ShellDispatcher.php';
-$found = false;
-$paths = explode(PATH_SEPARATOR, ini_get('include_path'));
+define('ROOT', $root);
 
-foreach ($paths as $path) {
-	if (file_exists($path . DS . $dispatcher)) {
-		$found = $path;
-		break;
-	}
+const WWW_ROOT = ROOT . DS . APP_DIR . DS . WEBROOT_DIR . DS;
+define('APP', ROOT . DS . APP_DIR . DS);
+/**
+ * This only needs to be changed if the "cake" directory is located
+ * outside of the distributed structure.
+ * Full path to the directory containing "cake". Do not add trailing directory separator
+ */
+const CAKE_CORE_INCLUDE_PATH = ROOT . DS . APP_DIR . '/Vendor/vendor/cakephp/cakephp/lib';
+if (!defined('CAKE_CORE_INCLUDE_PATH')) {
+	define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'lib');
 }
 
-if (!$found) {
-	$rootInstall = dirname(dirname(dirname(dirname(__FILE__)))) . DS . $dispatcher;
-	$composerInstall = dirname(dirname(dirname(__FILE__))) . DS . $dispatcher;
+const CORE_PATH = CAKE_CORE_INCLUDE_PATH . DS;
 
-	if (file_exists($composerInstall)) {
-		include $composerInstall;
-	} elseif (file_exists($rootInstall)) {
-		include $rootInstall;
-	} else {
-		trigger_error('Could not locate CakePHP core files.', E_USER_ERROR);
-	}
-	unset($rootInstall, $composerInstall);
+require_once APP.'Vendor/vendor/autoload.php';
 
-} else {
-	include $found . DS . $dispatcher;
-}
+$vendorPath = ROOT . DS . APP_DIR . DS . 'Vendor/vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib';
 
-// In lib/Cake/Console/cake makes app root path.
-$appPath = dirname(__DIR__, 4) . DS . 'app';
+$dispatcher =   'Cake' . DS . 'Console' . DS . 'ShellDispatcher.php';
 
-new ShellDispatcher([$_SERVER['argv'][0], '-working', $appPath]);
+require_once($vendorPath. DS . $dispatcher);
 
-unset($paths, $path, $found, $dispatcher, $appPath);
+new ShellDispatcher([$_SERVER['argv'][0], '-working', APP_DIR]);
+
+unset($dispatcher);
