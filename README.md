@@ -33,9 +33,13 @@ Here are steps I took to migrate my project through all versions to PHP 8.1, may
 
 ## Before using this fork ⚠️
 
-- Tests of CakePHP framework aren't refactored yet to support PHP 8. Main issue is old version of PHPUnit that is tightly coupled to framework's tests. Issue for fixing this situation is here: https://github.com/kamilwylegala/cakephp2-php8/issues/7
-- Due to lack of tests ☝️ - **you need to rely** on tests in your application after integrating with this fork.
+- ~~Tests of CakePHP framework aren't refactored yet to support PHP 8. Main issue is old version of PHPUnit that is tightly coupled to framework's tests. Issue for fixing this situation is here: https://github.com/kamilwylegala/cakephp2-php8/issues/7~~ Framework tests are migrated to PHPUnit 9.*. Github actions are running tests on PHP 8.0, 8.1.
+- ~~Due to lack of tests ☝️~~ - **you also need to rely** on tests in your application after integrating with this fork.
 - If after integration you spot any issues related to framework please let me know by creating an issue or pull request with fix.
+
+### Breaking changes
+
+- In order to get rid of `strftime()` deprecation notices, it's required to switch to `IntlDateFormatter` class. This class is available in `intl` extension. Fork doesn't require it explicitly but to be able to use its functions Symfony ICU Polyfill is installed. To provide `strftime` behavior compatibility, `PHP81_BC\strftime` is used. `PHP81_BC` doesn't fully cover strftime, your code should work but there is a chance you'll get slightly different results. Discussed (here)[https://github.com/kamilwylegala/cakephp2-php8/pull/64] and (here)[https://github.com/kamilwylegala/cakephp2-php8/issues/65].
 
 ## Installation
 
@@ -59,6 +63,78 @@ Example configuration:
 It means that composer will look at `master` branch of repository configured under `repositories` to resolve update of `cakephp/cakephp` package.
 
 ## Changelog
+
+### 2024-09-21
+
+- Added wrapper for PDOException to avoid creating dynamic property `queryString`.
+
+### 2024-07-24
+
+- Csrf vulnerabity fix back ported from Cake PHP 3
+- Explicit type hint definition of nullable parameters.
+
+### 2024-06-05
+
+- Removed usage of `strftime`, replaced with Intl extension.
+
+### 2024-05-24
+
+- Fix deprecation error in Model: `Automatic conversion of false to array is deprecated`
+
+### 2024-05-22
+
+- Fix deprecation error in I18n: `Automatic conversion of false to array is deprecated`
+
+### 2024-02-02
+
+- `str_len` deprecation warning fix in CakeResponse (passing null instead of `string`)
+
+### 2024-01-19
+
+- `strotime()` and `preg_split()` in CakeResponse deprecation warning fixes (passing null)
+
+### 2024-01-11
+
+- `preg_replace` deprecation warning fixes (passing null instead of `string`)
+
+### 2023-12-22
+
+- `preg_quote()` passing null fix
+
+### 2023-12-19
+
+- Muted dynamic property creation warnings in Controller.php
+- Fix passing a null input to h function (PR #56)
+- Fix Hash class callback callable pattern deprecated (PR #58)
+
+### 2023-11-13
+
+- Silence dynamic property creation warning in Model.php
+
+### 2023-11-02
+
+- Fixed: unitialized property in Debugger.php
+
+### 2023-10-20
+
+- Fallback to empty string from `env()` in basics.php and request handler.
+
+### 2023-10-19
+
+- Removed usage of deprecated `redis->getKeys()` in favor of `redis->keys()`.
+- Added docker-compose setup to run tests locally.
+
+### 2023-09-18
+
+- Fix for `ShellDispatcher` where `null` was passed to `strpos` function.
+
+### 2023-08-18
+
+- Fixed PHP8 deprecation notices. Related mostly to passing null as a `$haystack` value.
+
+### 2023-06-02
+
+- Fixed PHP 8.2 deprecation notices in CakeEvent: `Creation of dynamic property ... is deprecated.`
 
 ### 2023-02-19
 
